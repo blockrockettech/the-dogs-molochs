@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-jumbotron>
-            <h1>🍒 DAO Osaka 🌸</h1>
+            <h1>DAOsaka 🌸</h1>
             <div class="row" v-if="daoContract && daoStatics">
                 <div class="col-12 col-sm-6">
                     <div>
@@ -98,12 +98,12 @@
                             <div class="row mb-4 small" v-if="!proposal[6]">
                                 <div class="col">Periods Left: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</code></div>
                                 <div class="col text-center"><span class="badge badge-danger" v-if="proposal[13]">Voting closed</span></div>
-                                <div class="col text-right">Approx Hours Left: <code>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</code></div>
+                                <div class="col text-right">Hours Left: <code>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</code></div>
                             </div>
 
                             <div class="small">
                                 <div>Proposer: <code>{{ proposal[0] }}</code></div>
-                                <div>Total @ YES: <code>{{ proposal[11] }}</code></div>
+                                <!--<div>Total @ YES: <code>{{ proposal[11] }}</code></div>-->
                             </div>
                         </div>
                     </div>
