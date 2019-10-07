@@ -15,6 +15,21 @@ export default new Vuex.Store({
         daoStatics: null,
 
         unit: 'DAI',
+
+        daos: {
+            osaka: {
+                address: '0x7D1a4fC6Df3B16eB894004A4586A29f39Ba6d205',
+                unit: 'DAI',
+            },
+            molach: {
+                address: '0x1fd169A4f5c59ACf79d0Fd5d91D1201EF1Bce9f1',
+                unit: 'ETH',
+            },
+            metacartel: {
+                address: '',
+                unit: 'ETH',
+            }
+        }
     },
     getters: {
         rootApi: (state) => {
