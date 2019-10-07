@@ -1,14 +1,14 @@
 <template>
     <div>
         <b-jumbotron>
+            <h1>🍒 DAO Osaka 🌸</h1>
             <div class="row" v-if="daoContract && daoStatics">
-                <div class="col">
-                    <h1>🍒 DAO Osaka 🌸</h1>
+                <div class="col-12 col-sm-6">
                     <div>
                         <span class="text-muted">DAO contract:</span> <code>{{ daoContract.address }}</code>
                     </div>
                     <div>
-                        <span class="text-muted">Guild Bank:</span> <code>{{ daoStatics.guildBank }}</code>
+                        <span class="text-muted">Guild Bank:</span> <code>{{ daoStatics.guildBank }}</code><br/>
                     </div>
                     <div>
                         <span class="text-muted">Approved Token:</span> <code>{{ daoStatics.approvedToken }}</code>
@@ -23,7 +23,7 @@
                         <span class="text-muted">Current Period:</span> <strong class="ml-2">{{ daoStatics.currentPeriod }}</strong>
                     </div>
                 </div>
-                <div class="col text-right">
+                <div class="col-12 col-sm-6">
                     <div>
                         <span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}
                     </div>
@@ -49,15 +49,14 @@
                 <spinner></spinner>
             </div>
         </b-jumbotron>
-        <div class="row">
-            <div class="col-sm-4 col-12" v-if="proposals && daoContract && daoStatics" v-for="proposal in proposals">
+        <div class="row" v-if="proposals && daoContract && daoStatics">
+            <div class="col-sm-4 col-12" v-for="proposal in proposals">
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="card-header" :class="{'bg-minty': proposal[4] > 0, 'bg-yellowy': !proposal[6]  }">
                             <div class="row">
-                                <div class="col">#{{ proposal[12] }}</div>
-                                <div class="col text-center">{{ proposal[10] }}</div>
-                                <div class="col text-right">{{ proposal[2] }} Shares</div>
+                                <div class="col text-dark">#{{ proposal[12] }}</div>
+                                <div class="col text-right">{{ proposal[10] }}</div>
                             </div>
                         </div>
 
@@ -98,6 +97,7 @@
 
                             <div class="row mb-4 small" v-if="!proposal[6]">
                                 <div class="col">Periods Left: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</code></div>
+                                <div class="col text-center"><span class="badge badge-danger" v-if="proposal[13]">Voting closed</span></div>
                                 <div class="col text-right">Approx Hours Left: <code>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</code></div>
                             </div>
 
@@ -109,9 +109,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col" v-else>
-                <spinner></spinner>
-            </div>
+        </div>
+        <div v-else>
+            <spinner></spinner>
         </div>
     </div>
 </template>
@@ -178,7 +178,13 @@
                 if (qLen > 0) {
                     for (let i = 0; i < qLen; i++) {
                         let proposal = await doaContract.proposalQueue(i);
-                        proposal.push(i);
+                        proposal.push(i); // add index
+
+                        if (!proposal[6]) {
+                            const proposalVotingExpired = await doaContract.hasVotingPeriodExpired(proposal[3]);
+                            proposal.push(proposalVotingExpired);
+                        }
+
                         this.proposals.push(proposal);
                     }
                 }

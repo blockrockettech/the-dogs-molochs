@@ -10,10 +10,10 @@ export default new Vuex.Store({
         provider: null,
         signer: null,
         chain: null,
-        
+
         daoContract: null,
         daoStatics: null,
-        
+
         unit: 'DAI',
     },
     getters: {
@@ -72,12 +72,13 @@ export default new Vuex.Store({
             const totalShares = await state.daoContract.totalShares();
             const proposalDeposit = await state.daoContract.proposalDeposit();
             const summoningTime = await state.daoContract.summoningTime();
-            const guildBank = await state.daoContract.guildBank();
             const dilutionBound = await state.daoContract.dilutionBound();
             const approvedToken = await state.daoContract.approvedToken();
             const periodDuration = await state.daoContract.periodDuration();
             const votingPeriodLength = await state.daoContract.votingPeriodLength();
             const gracePeriodLength = await state.daoContract.gracePeriodLength();
+
+            const guildBank = await state.daoContract.guildBank();
 
             commit('daoStatics', {
                 processingReward,
