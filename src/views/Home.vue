@@ -45,6 +45,9 @@
 
                 </div>
             </div>
+            <div v-else>
+                <spinner></spinner>
+            </div>
         </b-jumbotron>
         <div class="row">
             <div class="col-sm-4 col-12" v-if="proposals && daoContract && daoStatics" v-for="proposal in proposals">
@@ -107,7 +110,7 @@
                 </div>
             </div>
             <div class="col" v-else>
-                Loading...
+                <spinner></spinner>
             </div>
         </div>
     </div>
@@ -117,10 +120,11 @@
     import { ethers, utils } from 'ethers';
     import NetworkBadge from '../components/NetworkBadge';
     import { mapGetters } from 'vuex';
+    import Spinner from '../../../blockcities-admin/src/components/Spinner';
 
     export default {
         name: 'home',
-        components: {NetworkBadge},
+        components: {Spinner, NetworkBadge},
         data() {
             return {
                 blocknumber: null,

@@ -44,21 +44,21 @@
     @keyframes square-anim {
         0% {
             height: 80px;
-            background-color: $pink;
+            background-color: #C5E3BF;
         }
         20% {
             height: 80px;
         }
         40% {
             height: 120px;
-            background-color: $red;
+            background-color: #FFF3D8;
         }
         80% {
             height: 80px;
         }
         100% {
             height: 80px;
-            background-color: $orange;
+            background-color: #C5E3BF;
         }
     }
 </style>
