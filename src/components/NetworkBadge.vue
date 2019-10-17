@@ -13,6 +13,6 @@
 
 <style lang="scss" scoped>
     .badge {
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
 </style>

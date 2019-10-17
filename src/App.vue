@@ -3,7 +3,7 @@
         <b-navbar toggleable="lg" type="dark" variant="info">
             <b-navbar-brand to="/">🍒 <code>the-dogs-molochs</code></b-navbar-brand>
 
-
+            <network-badge :chain="chain" v-if="chain"></network-badge>
 
             <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -11,13 +11,21 @@
 
                 <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
-                    <network-badge :chain="chain" v-if="chain"></network-badge>
+                    <b-nav-item-dropdown text="DAOs" right>
+                        <b-dropdown-item v-for="dao in daos"  v-if="daos" @click="dispatchDao(dao.key)" v-bind:key="dao.key">
+                            {{ dao.name }}
+                        </b-dropdown-item>
+                    </b-nav-item-dropdown>
                 </b-navbar-nav>
             </b-collapse>
         </b-navbar>
         <div class="container-fluid mt-4">
             <router-view/>
         </div>
+
+        <footer class="mt-5 mb-5 mr-5 text-right">
+            <a href="https://blockrocket.tech" target="_blank">Built by <img src="./assets/BR.png" style="max-height: 50px"/></a>
+        </footer>
     </div>
 </template>
 
@@ -32,7 +40,15 @@
         computed: {
             ...mapGetters([
                 'chain',
+                'daos',
             ]),
+        },
+        methods: {
+            dispatchDao(daoName) {
+                console.log(`Switching to ${daoName}`);
+
+                store.dispatch('daoContract', daoName);
+            },
         },
         created: async function () {
             try {
@@ -54,7 +70,6 @@
     $enable-rounded: false;
 
     @import '../node_modules/bootstrap/scss/bootstrap';
-
 
 
     body {

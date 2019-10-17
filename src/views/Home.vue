@@ -136,7 +136,7 @@
     import { ethers, utils } from 'ethers';
     import NetworkBadge from '../components/NetworkBadge';
     import { mapGetters } from 'vuex';
-    import Spinner from '../../../blockcities-admin/src/components/Spinner';
+    import Spinner from '../components/Spinner';
 
     export default {
         name: 'home',
@@ -207,12 +207,6 @@
                     }
                 }
             },
-            //FIXME
-            async getUnitBalance(address) {
-                if (this.provider) {
-                    const balance = await this.provider.getBalance(address);
-                }
-            }
         },
         filters: {
             toUnit: function (value) {

@@ -58,7 +58,7 @@
         }
         100% {
             height: 80px;
-            background-color: #C5E3BF;
+            background-color: #FF6347;
         }
     }
 </style>
