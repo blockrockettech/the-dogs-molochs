@@ -11,6 +11,7 @@
 
                 <!-- Right aligned nav items -->
                 <b-navbar-nav class="ml-auto">
+                    <span class="my-auto finger-lg">👉</span>
                     <b-nav-item-dropdown text="DAOs" right>
                         <b-dropdown-item v-for="dao in daos"  v-if="daos" @click="dispatchDao(dao.key)" v-bind:key="dao.key">
                             {{ dao.name }}
@@ -102,5 +103,9 @@
 
     .bg-tomato {
         background-color: #FF6347;
+    }
+
+    .finger-lg {
+        font-size: 1.5rem;
     }
 </style>

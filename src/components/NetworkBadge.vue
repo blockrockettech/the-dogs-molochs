@@ -1,6 +1,6 @@
 <template>
     <div>
-        <span class="badge badge-secondary">{{ chain.name }} [{{chain.chainId}}]</span>
+        <span class="badge badge-secondary small">{{ chain.name }} [{{chain.chainId}}]</span>
     </div>
 </template>
 

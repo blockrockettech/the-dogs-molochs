@@ -31,7 +31,7 @@
                     <span class="text-muted">Current Period:</span> <span class="badge badge-secondary ml-2">{{ daoStatics.currentPeriod }}</span>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 text-right">
+            <div class="col-12 col-sm-6">
                 <!--<div>-->
                     <!--<span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}-->
                 <!--</div>-->
@@ -119,7 +119,7 @@
                                 </div>
                             </li>
                             <li class="list-group-item bg-light small">
-                                <pre>{{ proposal[10] }}</pre>
+                                <code>{{ proposal[10] }}</code>
                             </li>
                         </ul>
                     </div>
