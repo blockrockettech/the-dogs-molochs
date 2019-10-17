@@ -5,28 +5,36 @@
             <div class="row" v-if="daoContract && daoStatics">
                 <div class="col-12 col-sm-6">
                     <div>
-                        <span class="text-muted">Total Shares:</span><span class="badge badge-lg badge-success ml-2 pl-2 pr-2">{{ daoStatics.totalShares }}</span>
+                        <span class="text-muted">Total Shares:</span><span class="badge badge-dark ml-2">{{ daoStatics.totalShares }}</span>
                     </div>
                     <div>
                         <span class="text-muted">DAO contract:</span> <code>{{ daoContract.address }}</code>
                     </div>
                     <div>
-                        <span class="text-muted">Guild Bank:</span> <code>{{ daoStatics.guildBank }}</code><br/>
+                        <span class="text-muted">DAO Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.daoBalance | toUnit }} {{ unit }}</span><br/>
                     </div>
                     <div>
                         <span class="text-muted">Approved Token:</span> <code>{{ daoStatics.approvedToken }}</code>
                     </div>
-                    <div v-if="proposalsQueueLength">
-                        <span class="text-muted">Queue Length:</span> <span class="badge badge-warning ml-2 pl-2 pr-2">{{ proposalsQueueLength }}</span>
+                    <hr/>
+                    <div>
+                        <span class="text-muted">Guild Bank:</span> <code>{{ daoStatics.guildBank }}</code><br/>
                     </div>
                     <div>
-                        <span class="text-muted">Current Period:</span> <span class="badge badge-secondary ml-2 pl-2 pr-2">{{ daoStatics.currentPeriod }}</span></strong>
+                        <span class="text-muted">Guild Bank Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.guildBankApprovedTokenBalance | toUnit }} {{ unit }}</span><br/>
+                    </div>
+                    <hr/>
+                    <div v-if="proposalsQueueLength">
+                        <span class="text-muted">Queue Length:</span> <span class="badge badge-secondary ml-2">{{ proposalsQueueLength }}</span>
+                    </div>
+                    <div>
+                        <span class="text-muted">Current Period:</span> <span class="badge badge-secondary ml-2">{{ daoStatics.currentPeriod }}</span>
                     </div>
                 </div>
                 <div class="col-12 col-sm-6 text-right">
-                    <div>
-                        <span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}
-                    </div>
+                    <!--<div>-->
+                        <!--<span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}-->
+                    <!--</div>-->
                     <div>
                         <span class="text-muted">Period Duration:</span> {{ daoStatics.periodDuration }} secs ({{ daoStatics.periodDuration / 60 / 60 }} hours)
                     </div>
@@ -55,8 +63,8 @@
                     <div class="card-body">
                         <div class="card-header" :class="{'bg-minty': proposal[4] > 0, 'bg-yellowy': !proposal[6]  }">
                             <div class="row">
-                                <div class="col text-dark"><span class="badge badge-info">#{{ proposal[12] }}</span></div>
-                                <div class="col text-right"><span class="text-muted small">{{ proposal[10] }}</span></div>
+                                <div class="col text-dark"><span class="badge badge-dark">#{{ proposal[12] }}</span></div>
+                                <div class="col text-right details"><span class="text-muted small">{{ proposal[10] }}</span></div>
                             </div>
                         </div>
 
@@ -66,8 +74,8 @@
                             </li>
                             <li class="list-group-item">
                                 <div class="row">
-                                    <div class="col">{{ proposal[9] | toUnit }} {{ unit }}</div>
-                                    <div class="col text-right">{{ proposal[2] }} Shares</div>
+                                    <div class="col"><span class="badge badge-info">{{ proposal[9] | toUnit }} {{ unit }}</span></div>
+                                    <div class="col text-right"><span class="badge badge-dark">{{ proposal[2] }} Shares</span></div>
                                 </div>
                             </li>
                             <li class="list-group-item">
@@ -79,13 +87,13 @@
                                         <span class="badge" :class="{'badge-danger': proposal[5] > 0}">NO: <span>{{ proposal[5] }}</span></span>
                                     </div>
                                     <div class="col" v-if="proposal[6] > 0">
-                                        <span class="badge badge-success">PROCESSED</span>
+                                        <span class="badge badge-secondary">PROCESSED</span>
                                     </div>
                                     <div class="col" v-else>
                                         <span class="badge badge-warning">UNPROCESSED</span>
                                     </div>
                                     <div class="col" v-if="proposal[7]">
-                                        <span class="badge badge-info">PASS</span>
+                                        <span class="badge badge-success">PASS</span>
                                     </div>
                                     <div class="col" v-if="proposal[8]">
                                         <span class="badge badge-danger">ABORTED</span>
@@ -214,6 +222,12 @@
 <style lang="scss" scoped>
     .badge-lg {
         font-size: 1.5rem;
+    }
+
+    .details {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 </style>
 

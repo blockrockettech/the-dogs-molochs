@@ -14,6 +14,8 @@ export default new Vuex.Store({
         daoContract: null,
         daoStatics: null,
 
+        approvedTokenContract: null,
+
         selectedDao: 'osaka',
 
         daos: {
@@ -44,6 +46,7 @@ export default new Vuex.Store({
         signer: (state) => state.signer,
         chain: (state) => state.chain,
         daoContract: (state) => state.daoContract,
+        approvedTokenContract: (state) => state.approvedTokenContract,
         daoStatics: (state) => state.daoStatics,
         unit: (state) => state.daos[state.selectedDao].unit,
         doaName: (state) => state.daos[state.selectedDao].name,
@@ -60,6 +63,9 @@ export default new Vuex.Store({
         },
         daoContract (state, daoContract) {
             state.daoContract = daoContract;
+        },
+        approvedTokenContract (state, approvedTokenContract) {
+            state.approvedTokenContract = approvedTokenContract;
         },
         daoStatics (state, daoStatics) {
             state.daoStatics = daoStatics;
@@ -80,6 +86,7 @@ export default new Vuex.Store({
                 state.signer
             );
             commit('daoContract', daoContract);
+
             dispatch('contractStatics');
         },
         async contractStatics({ commit, dispatch, state }) {
@@ -98,6 +105,16 @@ export default new Vuex.Store({
 
             const guildBank = await state.daoContract.guildBank();
 
+            const approvedTokenContract = new ethers.Contract(
+                approvedToken,
+                require('./abi/erc20-abi'),
+                state.signer
+            );
+            commit('approvedTokenContract', approvedTokenContract);
+
+            const guildBankApprovedTokenBalance = await approvedTokenContract.balanceOf(guildBank);
+            const daoBalance = await approvedTokenContract.balanceOf(state.daoContract.address);
+
             commit('daoStatics', {
                 processingReward,
                 currentPeriod,
@@ -110,6 +127,8 @@ export default new Vuex.Store({
                 periodDuration,
                 votingPeriodLength,
                 gracePeriodLength,
+                guildBankApprovedTokenBalance,
+                daoBalance,
             });
         }
     }
