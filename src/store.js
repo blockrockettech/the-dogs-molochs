@@ -14,21 +14,23 @@ export default new Vuex.Store({
         daoContract: null,
         daoStatics: null,
 
-        unit: 'DAI',
+        selectedDao: 'osaka',
 
         daos: {
             osaka: {
+                name: 'DAOsaka 🌸',
                 address: '0x7D1a4fC6Df3B16eB894004A4586A29f39Ba6d205',
                 unit: 'DAI',
             },
-            molach: {
+            moloch: {
+                name: 'Moloch',
                 address: '0x1fd169A4f5c59ACf79d0Fd5d91D1201EF1Bce9f1',
                 unit: 'ETH',
             },
-            metacartel: {
-                address: '',
-                unit: 'ETH',
-            }
+            // metacartel: {
+            //     address: '',
+            //     unit: 'ETH',
+            // },
         }
     },
     getters: {
@@ -38,12 +40,13 @@ export default new Vuex.Store({
             }
             return 'https://us-central1-block-cities.cloudfunctions.net/api';
         },
-        provider: state => state.provider,
-        signer: state => state.signer,
-        chain: state => state.chain,
-        daoContract: state => state.daoContract,
-        daoStatics: state => state.daoStatics,
-        unit: state => state.unit,
+        provider: (state) => state.provider,
+        signer: (state) => state.signer,
+        chain: (state) => state.chain,
+        daoContract: (state) => state.daoContract,
+        daoStatics: (state) => state.daoStatics,
+        unit: (state) => state.daos[state.selectedDao].unit,
+        doaName: (state) => state.daos[state.selectedDao].name,
     },
     mutations: {
         provider (state, provider) {
@@ -72,7 +75,7 @@ export default new Vuex.Store({
             commit('chain', chain);
 
             const daoContract = new ethers.Contract(
-                '0x7D1a4fC6Df3B16eB894004A4586A29f39Ba6d205',
+                state.daos[state.selectedDao].address,
                 require('./abi/molach-abi'),
                 state.signer
             );

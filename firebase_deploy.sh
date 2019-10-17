@@ -11,6 +11,6 @@ PACKAGE_VERSION=$(cat package.json \
 npm run build;
 
 echo "Deploying version $PACKAGE_VERSION to PRODUCTION"
-firebase use dogs-molachs;
-firebase deploy --only hosting:dogs-molachs;
+firebase use the-dogs-molochs;
+firebase deploy --only hosting:the-dogs-molochs;
 

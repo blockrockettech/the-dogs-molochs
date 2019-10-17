@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-navbar toggleable="lg" type="dark" variant="info">
-            <b-navbar-brand to="/">🍒</b-navbar-brand>
+            <b-navbar-brand to="/">🍒 <code>the-dogs-molochs</code></b-navbar-brand>
 
 
 
@@ -49,7 +49,17 @@
 </script>
 
 <style lang="scss">
+    @import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
+
+    $enable-rounded: false;
+
     @import '../node_modules/bootstrap/scss/bootstrap';
+
+
+
+    body {
+        font-family: 'Roboto Mono', monospace;
+    }
 
     h1 {
         margin-bottom: 2rem;

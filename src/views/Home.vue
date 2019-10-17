@@ -1,9 +1,12 @@
 <template>
     <div>
         <b-jumbotron>
-            <h1>DAOsaka 🌸</h1>
+            <h1 class="text-center">{{ doaName }}</h1>
             <div class="row" v-if="daoContract && daoStatics">
                 <div class="col-12 col-sm-6">
+                    <div>
+                        <span class="text-muted">Total Shares:</span><span class="badge badge-lg badge-success ml-2 pl-2 pr-2">{{ daoStatics.totalShares }}</span>
+                    </div>
                     <div>
                         <span class="text-muted">DAO contract:</span> <code>{{ daoContract.address }}</code>
                     </div>
@@ -13,17 +16,14 @@
                     <div>
                         <span class="text-muted">Approved Token:</span> <code>{{ daoStatics.approvedToken }}</code>
                     </div>
-                    <div>
-                        <span class="text-muted">Total Shares:</span> <span class="badge badge-success ml-2 pl-2 pr-2">{{ daoStatics.totalShares }}</span>
-                    </div>
                     <div v-if="proposalsQueueLength">
                         <span class="text-muted">Queue Length:</span> <span class="badge badge-warning ml-2 pl-2 pr-2">{{ proposalsQueueLength }}</span>
                     </div>
                     <div>
-                        <span class="text-muted">Current Period:</span> <strong class="ml-2">{{ daoStatics.currentPeriod }}</strong>
+                        <span class="text-muted">Current Period:</span> <span class="badge badge-secondary ml-2 pl-2 pr-2">{{ daoStatics.currentPeriod }}</span></strong>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6">
+                <div class="col-12 col-sm-6 text-right">
                     <div>
                         <span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}
                     </div>
@@ -51,61 +51,66 @@
         </b-jumbotron>
         <div class="row" v-if="proposals && daoContract && daoStatics">
             <div class="col-sm-4 col-12" v-for="proposal in proposals">
-                <div class="card mb-4">
+                <div class="shadow-sm card mb-4">
                     <div class="card-body">
                         <div class="card-header" :class="{'bg-minty': proposal[4] > 0, 'bg-yellowy': !proposal[6]  }">
                             <div class="row">
-                                <div class="col text-dark">#{{ proposal[12] }}</div>
-                                <div class="col text-right">{{ proposal[10] }}</div>
+                                <div class="col text-dark"><span class="badge badge-info">#{{ proposal[12] }}</span></div>
+                                <div class="col text-right"><span class="text-muted small">{{ proposal[10] }}</span></div>
                             </div>
                         </div>
 
-                        <div class="m-2">
-                            <p class="card-title small">Applicant: <code>{{ proposal[1] }}</code></p>
-
-                            <div class="row mb-4 mt-4">
-                                <div class="col">{{ proposal[9] | toUnit }} {{ unit }}</div>
-                                <div class="col text-right">{{ proposal[2] }} Shares</div>
-                            </div>
-
-                            <div class="row text-center mb-4">
-                                <div class="col">
-                                    <span class="badge" :class="{'badge-success': proposal[4] > 0}">YES: <span>{{ proposal[4] }}</span></span>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item bg-light">
+                                <p class="card-title small">Applicant: <code>{{ proposal[1] }}</code></p>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col">{{ proposal[9] | toUnit }} {{ unit }}</div>
+                                    <div class="col text-right">{{ proposal[2] }} Shares</div>
                                 </div>
-                                <div class="col">
-                                    <span class="badge" :class="{'badge-danger': proposal[5] > 0}">NO: <span>{{ proposal[5] }}</span></span>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row text-center">
+                                    <div class="col">
+                                        <span class="badge" :class="{'badge-success': proposal[4] > 0}">YES: <span>{{ proposal[4] }}</span></span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="badge" :class="{'badge-danger': proposal[5] > 0}">NO: <span>{{ proposal[5] }}</span></span>
+                                    </div>
+                                    <div class="col" v-if="proposal[6] > 0">
+                                        <span class="badge badge-success">PROCESSED</span>
+                                    </div>
+                                    <div class="col" v-else>
+                                        <span class="badge badge-warning">UNPROCESSED</span>
+                                    </div>
+                                    <div class="col" v-if="proposal[7]">
+                                        <span class="badge badge-info">PASS</span>
+                                    </div>
+                                    <div class="col" v-if="proposal[8]">
+                                        <span class="badge badge-danger">ABORTED</span>
+                                    </div>
                                 </div>
-                                <div class="col" v-if="proposal[6] > 0">
-                                    <span class="badge badge-success">PROCESSED</span>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="row mb-2 small">
+                                    <div class="col">Start: <code>{{ proposal[3] }}</code></div>
+                                    <div class="col text-center">End: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) }}</code></div>
+                                    <div class="col text-right">Grace: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) }}</code></div>
                                 </div>
-                                <div class="col" v-else>
-                                    <span class="badge badge-warning">UNPROCESSED</span>
+                                <div class="row mb-4 small" v-if="!proposal[6]">
+                                    <div class="col">Left: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</code></div>
+                                    <div class="col text-center"><span class="badge badge-danger" v-if="proposal[13]">Voting closed</span></div>
+                                    <div class="col text-right">Hrs Left: <code>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</code></div>
                                 </div>
-                                <div class="col" v-if="proposal[7]">
-                                    <span class="badge badge-info">PASS</span>
+                            </li>
+                            <li class="list-group-item bg-light">
+                                <div class="small">
+                                    <div>Proposer: <code>{{ proposal[0] }}</code></div>
+                                    <!--<div>Total @ YES: <code>{{ proposal[11] }}</code></div>-->
                                 </div>
-                                <div class="col" v-if="proposal[8]">
-                                    <span class="badge badge-danger">ABORTED</span>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2 small">
-                                <div class="col">Start: <code>{{ proposal[3] }}</code></div>
-                                <div class="col text-center">Vote End: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) }}</code></div>
-                                <div class="col text-right">Grace End: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) }}</code></div>
-                            </div>
-
-                            <div class="row mb-4 small" v-if="!proposal[6]">
-                                <div class="col">Periods Left: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</code></div>
-                                <div class="col text-center"><span class="badge badge-danger" v-if="proposal[13]">Voting closed</span></div>
-                                <div class="col text-right">Hours Left: <code>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</code></div>
-                            </div>
-
-                            <div class="small">
-                                <div>Proposer: <code>{{ proposal[0] }}</code></div>
-                                <!--<div>Total @ YES: <code>{{ proposal[11] }}</code></div>-->
-                            </div>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -147,6 +152,8 @@
                 'provider',
                 'chain',
                 'unit',
+                'doaName',
+                'accBalance',
             ]),
         },
         created: async function () {
@@ -189,6 +196,12 @@
                     }
                 }
             },
+            //FIXME
+            async getUnitBalance(address) {
+                if (this.provider) {
+                    const balance = await this.provider.getBalance(address);
+                }
+            }
         },
         filters: {
             toUnit: function (value) {
@@ -198,5 +211,10 @@
         },
     };
 </script>
+<style lang="scss" scoped>
+    .badge-lg {
+        font-size: 1.5rem;
+    }
+</style>
 
 
