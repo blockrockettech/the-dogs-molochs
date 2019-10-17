@@ -8,7 +8,7 @@
                     <span class="text-muted">Total Shares:</span><span class="badge badge-dark ml-2">{{ daoStatics.totalShares }}</span>
                 </div>
                 <div>
-                    <span class="text-muted">DAO contract:</span> <code>{{ daoContract.address }}</code>
+                    <span class="text-muted">DAO:</span> <code>{{ daoContract.address }}</code>
                 </div>
                 <div>
                     <span class="text-muted">DAO Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.daoBalance | toUnit }} {{ unit }}</span><br/>
