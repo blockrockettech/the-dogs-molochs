@@ -61,7 +61,7 @@
             <div class="col-sm-4 col-12" v-for="proposal in proposals">
                 <div class="shadow-sm card mb-4">
                     <div class="card-body">
-                        <div class="card-header" :class="{'bg-minty': proposal[4] > 0, 'bg-yellowy': !proposal[6]  }">
+                        <div class="card-header" :class="{'bg-minty': proposal[4] > 0, 'bg-yellowy': !proposal[6], 'bg-tomato': proposal[8] }">
                             <div class="row">
                                 <div class="col text-dark"><span class="badge badge-dark">#{{ proposal[12] }}</span></div>
                                 <div class="col text-right details"><span class="text-muted small">{{ proposal[10] }}</span></div>
@@ -117,6 +117,9 @@
                                     <div>Proposer: <code>{{ proposal[0] }}</code></div>
                                     <!--<div>Total @ YES: <code>{{ proposal[11] }}</code></div>-->
                                 </div>
+                            </li>
+                            <li class="list-group-item bg-light small">
+                                <pre>{{ proposal[10] }}</pre>
                             </li>
                         </ul>
                     </div>

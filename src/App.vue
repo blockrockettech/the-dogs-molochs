@@ -77,4 +77,8 @@
     .bg-yellowy {
         background-color: #FFF3D8;
     }
+
+    .bg-tomato {
+        background-color: #FF6347;
+    }
 </style>

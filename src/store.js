@@ -16,23 +16,34 @@ export default new Vuex.Store({
 
         approvedTokenContract: null,
 
-        selectedDao: 'osaka',
+        selectedDao: 'metacartel',
 
         daos: {
             osaka: {
-                name: 'DAOsaka 🌸',
+                name: '🌸 DAOsaka 🌸',
                 address: '0x7D1a4fC6Df3B16eB894004A4586A29f39Ba6d205',
                 unit: 'DAI',
             },
             moloch: {
-                name: 'Moloch',
+                name: '👹 Moloch DAO 👹',
                 address: '0x1fd169A4f5c59ACf79d0Fd5d91D1201EF1Bce9f1',
-                unit: 'ETH',
+                unit: 'wETH',
             },
-            // metacartel: {
-            //     address: '',
-            //     unit: 'ETH',
-            // },
+            metacartel: {
+                name: '🌶️ MetaCartel DAO 🌶️',
+                address: '0x0372f3696fa7dc99801f435fd6737e57818239f2',
+                unit: 'wETH',
+            },
+            yang: {
+                name: '️YangDAO',
+                address: '0xb3c02f093e6140ed2ad91be66b302f938cd8434f',
+                unit: 'wETH',
+            },
+            orochi: {
+                name: 'Orochi DAO',
+                address: '0x8487dcc6f4b28b911e22a8657ebb16427d4cf5c0',
+                unit: 'wETH',
+            },
         }
     },
     getters: {
