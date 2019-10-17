@@ -5,7 +5,10 @@
             <div class="row" v-if="daoContract && daoStatics">
             <div class="col-12 col-sm-6">
                 <div>
-                    <span class="text-muted">Total Shares:</span><span class="badge badge-dark ml-2">{{ daoStatics.totalShares }}</span>
+                    <span class="text-muted">Total Shares:</span><span class="badge badge-primary ml-2">{{ daoStatics.totalShares }}</span>
+                </div>
+                <div>
+                    <span class="text-muted">Share price:</span><span class="badge badge-info ml-2">{{ (parseFloat(daoStatics.guildBankApprovedTokenBalance)  /  parseFloat(daoStatics.totalShares)) | toUnit }} {{ unit }}</span>
                 </div>
                 <div>
                     <span class="text-muted">DAO:</span> <code>{{ daoContract.address }}</code>
@@ -78,7 +81,7 @@
                                     <div class="col text-right"><span class="badge badge-dark">{{ proposal[2] }} Shares</span></div>
                                 </div>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item bg-light">
                                 <div class="row text-center">
                                     <div class="col">
                                         <span class="badge" :class="{'badge-success': proposal[4] > 0}">YES: <span>{{ proposal[4] }}</span></span>
@@ -103,13 +106,13 @@
                             <li class="list-group-item">
                                 <div class="row mb-2 small">
                                     <div class="col">Start: <code>{{ proposal[3] }}</code></div>
-                                    <div class="col text-center">End: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) }}</code></div>
-                                    <div class="col text-right">Grace: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) }}</code></div>
+                                    <div class="col text-center">End: {{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) }}</div>
+                                    <div class="col text-right">Grace: {{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) }}</div>
                                 </div>
                                 <div class="row mb-4 small" v-if="!proposal[6]">
-                                    <div class="col">Left: <code>{{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</code></div>
+                                    <div class="col">Left: {{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</div>
                                     <div class="col text-center"><span class="badge badge-danger" v-if="proposal[13]">Voting closed</span></div>
-                                    <div class="col text-right">Hrs Left: <code>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</code></div>
+                                    <div class="col text-right">Hrs Left: <strong>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</strong></div>
                                 </div>
                             </li>
                             <li class="list-group-item bg-light">
@@ -118,7 +121,7 @@
                                     <!--<div>Total @ YES: <code>{{ proposal[11] }}</code></div>-->
                                 </div>
                             </li>
-                            <li class="list-group-item bg-light small">
+                            <li class="list-group-item small">
                                 <code>{{ proposal[10] }}</code>
                             </li>
                         </ul>
