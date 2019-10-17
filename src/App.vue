@@ -23,8 +23,15 @@
             <router-view/>
         </div>
 
-        <footer class="mt-5 mb-5 mr-5 text-right">
-            <a href="https://blockrocket.tech" target="_blank">Built by <img src="./assets/BR.png" style="max-height: 50px"/></a>
+        <footer class="m-5">
+            <div class="row">
+                <div class="col ">
+                    <a href="https://www.urbandictionary.com/define.php?term=Dog%27s%20Bollocks" target="_blank" class="small">Why is this called 'the-dogs-molochs'?</a>
+                </div>
+                <div class="col text-right">
+                    <a href="https://blockrocket.tech" target="_blank">Built by <img src="./assets/BR.png" style="max-height: 50px"/></a>
+                </div>
+            </div>
         </footer>
     </div>
 </template>

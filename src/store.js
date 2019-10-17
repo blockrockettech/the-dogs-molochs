@@ -16,7 +16,7 @@ export default new Vuex.Store({
 
         approvedTokenContract: null,
 
-        selectedDao: 'metacartel',
+        selectedDao: 'osaka',
 
         daos: {
             osaka: {
