@@ -38,13 +38,13 @@ export default new Vuex.Store({
                 unit: 'wETH',
             },
             yang: {
-                name: '️YangDAO',
+                name: '️🌅 YangDAO 🌅',
                 key: 'yang',
                 address: '0xb3c02f093e6140ed2ad91be66b302f938cd8434f',
                 unit: 'wETH',
             },
             orochi: {
-                name: 'Orochi DAO',
+                name: '🐍 Orochi DAO 🐍',
                 key: 'orochi',
                 address: '0x8487dcc6f4b28b911e22a8657ebb16427d4cf5c0',
                 unit: 'wETH',
