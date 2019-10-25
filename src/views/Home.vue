@@ -83,7 +83,7 @@
                                 </div>
                             </li>
                             <li class="list-group-item bg-light">
-                                <div class="row text-center">
+                                <div class="row">
                                     <div class="col">
                                         <span class="badge" :class="{'badge-success': proposal[4] > 0}">YES: <span>{{ proposal[4] }}</span></span>
                                     </div>
