@@ -62,11 +62,11 @@
             try {
                 await window.ethereum.enable();
                 const provider = new ethers.providers.Web3Provider(web3.currentProvider);
-                const signer = provider.getSigner();
 
                 store.dispatch('provider', provider);
             } catch (e) {
                 console.error(e);
+                alert('You need a Web3 wallet (pointing at main-net) to use this dashboard (like MetaMask)!')
             }
         },
     };

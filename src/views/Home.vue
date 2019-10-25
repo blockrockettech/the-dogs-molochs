@@ -30,23 +30,24 @@
                 <div v-if="proposalsQueueLength">
                     <span class="text-muted">Queue Length:</span> <span class="badge badge-secondary ml-2">{{ proposalsQueueLength }}</span>
                 </div>
-                <div>
-                    <span class="text-muted">Current Period:</span> <span class="badge badge-secondary ml-2">{{ daoStatics.currentPeriod }}</span>
-                </div>
             </div>
             <div class="col-12 col-sm-6">
                 <!--<div>-->
                     <!--<span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}-->
                 <!--</div>-->
                 <div>
-                    <span class="text-muted">Period Duration:</span> {{ daoStatics.periodDuration }} secs ({{ daoStatics.periodDuration / 60 / 60 }} hours)
+                    <span class="text-muted">Current Period:</span> {{ daoStatics.currentPeriod }}
                 </div>
                 <div>
-                    <span class="text-muted">Voting Period Length:</span> {{ daoStatics.votingPeriodLength }} ({{ daoStatics.periodDuration * daoStatics.votingPeriodLength / 60 / 60 }} hours)
+                    <span class="text-muted">Period Duration:</span> {{ daoStatics.periodDuration }} <small>secs</small> ({{ 1 | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
                 </div>
                 <div>
-                    <span class="text-muted">Grace Period Length:</span> {{ daoStatics.gracePeriodLength }} ({{ daoStatics.periodDuration * daoStatics.gracePeriodLength / 60 / 60 }} hours)
+                    <span class="text-muted">Voting Period Length:</span> {{ daoStatics.votingPeriodLength }} ({{  daoStatics.votingPeriodLength | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
                 </div>
+                <div>
+                    <span class="text-muted">Grace Period Length:</span> {{ daoStatics.gracePeriodLength }} ({{ daoStatics.gracePeriodLength | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
+                </div>
+                <hr/>
                 <div>
                     <span class="text-muted">Proposal Deposit:</span> {{ daoStatics.proposalDeposit | toUnit }} {{ unit }}
                 </div>
@@ -62,7 +63,7 @@
         </b-jumbotron>
         <div class="row" v-if="proposals && daoContract && daoStatics">
             <div class="col-sm-4 col-12" v-for="proposal in proposals">
-                <div class="shadow-sm card mb-4">
+                <div class="shadow card mb-4">
                     <div class="card-body">
                         <div class="card-header" :class="{'bg-minty': proposal[4] > 0, 'bg-yellowy': !proposal[6], 'bg-tomato': proposal[8] }">
                             <div class="row">
@@ -105,14 +106,20 @@
                             </li>
                             <li class="list-group-item">
                                 <div class="row mb-2 small">
-                                    <div class="col">Start: <code>{{ proposal[3] }}</code></div>
+                                    <div class="col">Start: {{ proposal[3] }}</div>
                                     <div class="col text-center">End: {{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) }}</div>
                                     <div class="col text-right">Grace: {{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) }}</div>
                                 </div>
                                 <div class="row mb-4 small" v-if="!proposal[6]">
-                                    <div class="col">Left: {{ parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod }}</div>
-                                    <div class="col text-center"><span class="badge badge-danger" v-if="proposal[13]">Voting closed</span></div>
-                                    <div class="col text-right">Hrs Left: <strong>{{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) * daoStatics.periodDuration / 60 / 60 }}</strong></div>
+                                    <div class="col">
+                                        <span class="badge badge-danger" v-if="proposal[13]">Voting closed</span>
+                                        <span v-else>
+                                           Voting End: {{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) - daoStatics.currentPeriod) | toHrs(daoStatics.periodDuration) }} <small>hrs</small>
+                                        </span>
+                                    </div>
+                                    <div class="col text-right">
+                                        Grace End: {{ (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) | toHrs(daoStatics.periodDuration) }} <small>hrs</small>
+                                    </div>
                                 </div>
                             </li>
                             <li class="list-group-item bg-light">
@@ -123,6 +130,26 @@
                             </li>
                             <li class="list-group-item small">
                                 <code>{{ proposal[10] }}</code>
+                            </li>
+                            <li class="list-group-item small bg-dark" v-if="!proposal[6] && (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) - daoStatics.currentPeriod) > 0">
+                                <div class="row">
+                                    <div class="col">
+                                        <b-button variant="success" size="sm" v-on:click="vote(proposal[12], 1)">YES</b-button>
+                                    </div>
+                                    <div class="col text-center">
+                                        <b-button variant="danger" size="sm" v-on:click="vote(proposal[12], 2)">NO</b-button>
+                                    </div>
+                                    <div class="col text-right">
+                                        <b-button variant="warning" size="sm" v-on:click="vote(proposal[12], 0)">ABSTAIN</b-button>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item small bg-dark" v-if="!proposal[6] && (parseInt(proposal[3]) + parseInt(daoStatics.votingPeriodLength) + parseInt(daoStatics.gracePeriodLength) - daoStatics.currentPeriod) <= 0">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <b-button variant="light" size="sm" v-on:click="processProposal(proposal[12])">PROCESS PROPOSAL</b-button>
+                                    </div>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -211,12 +238,36 @@
                     }
                 }
             },
+
+            async vote(index, voteVal) {
+                console.log(`voting proposal ${index} with vote of ${voteVal}`);
+
+                const tx = await this.daoContract.submitVote(index, voteVal);
+                alert(`Transaction: ${JSON.stringify(tx)}`);
+
+                const receipt = await tx.wait(1);
+                alert(`Receipt: ${JSON.stringify(receipt)}`);
+            },
+
+            async processProposal(index) {
+                console.log(`process proposal ${index}`);
+
+                const tx = await this.daoContract.processProposal(index);
+                alert(`Transaction: ${JSON.stringify(tx)}`);
+
+                const receipt = await tx.wait(1);
+                alert(`Receipt: ${JSON.stringify(receipt)}`);
+            }
         },
         filters: {
             toUnit: function (value) {
                 if (!value) return '';
                 return utils.formatEther(utils.bigNumberify(value.toString()));
-            }
+            },
+            toHrs: function (value, periodInSecs) {
+                if (!value) return '';
+                return (parseFloat(value) * periodInSecs) / 60 / 60;
+            },
         },
     };
 </script>
