@@ -54,7 +54,16 @@
                 <div>
                     <span class="text-muted">Processing Reward:</span> {{ daoStatics.processingReward | toUnit }} {{ unit }}
                 </div>
+                <div class="text-center mt-4">
+                    <b-form inline>
+                        <b-input class="mb-2 mr-sm-2 mb-sm-0" type="number" v-model="form.noOfShares"></b-input>
 
+                        <b-button variant="danger" size="lg" v-on:click="rageQuit()">RAGE QUIT 😤</b-button>
+                        <b-form-text>
+                            Rage quitting sends your {{ unit }} back in exchange for your shares 💸
+                        </b-form-text>
+                    </b-form>
+                </div>
             </div>
         </div>
             <div v-else>
@@ -179,9 +188,7 @@
                 proposals: [],
                 tx: null,
                 form: {
-                    recipient: null,
-                    selectedSpecial: null,
-                    specials: []
+                    noOfShares: 1,
                 }
             };
         },
@@ -243,20 +250,30 @@
                 console.log(`voting proposal ${index} with vote of ${voteVal}`);
 
                 const tx = await this.daoContract.submitVote(index, voteVal);
-                alert(`Transaction: ${JSON.stringify(tx)}`);
+                alert(`Transaction: ${tx.hash}`);
 
-                const receipt = await tx.wait(1);
-                alert(`Receipt: ${JSON.stringify(receipt)}`);
+                await tx.wait(1);
+                alert(`Confirmed...`);
+            },
+
+            async rageQuit(noOfShares) {
+                console.log(`rage quitting ${this.form.noOfShares}`);
+
+                const tx = await this.daoContract.ragequit(this.form.noOfShares);
+                alert(`Transaction: ${tx.hash}`);
+
+                await tx.wait(1);
+                alert(`Confirmed...`);
             },
 
             async processProposal(index) {
                 console.log(`process proposal ${index}`);
 
                 const tx = await this.daoContract.processProposal(index);
-                alert(`Transaction: ${JSON.stringify(tx)}`);
+                alert(`Transaction: ${tx.hash}`);
 
-                const receipt = await tx.wait(1);
-                alert(`Receipt: ${JSON.stringify(receipt)}`);
+                await tx.wait(1);
+                alert(`Confirmed...`);
             }
         },
         filters: {
