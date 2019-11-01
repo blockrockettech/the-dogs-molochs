@@ -7,6 +7,9 @@ import { ethers, utils } from 'ethers';
 
 export default new Vuex.Store({
     state: {
+        account: null,
+        accountShares: null,
+
         provider: null,
         signer: null,
         chain: null,
@@ -68,6 +71,8 @@ export default new Vuex.Store({
         doaName: (state) => state.daos[state.selectedDao].name,
         daos: (state) => state.daos,
         selectedDao: (state) => state.selectedDao,
+        account: (state) => state.account,
+        accountShares: (state) => state.accountShares,
     },
     mutations: {
         provider (state, provider) {
@@ -90,7 +95,13 @@ export default new Vuex.Store({
         },
         selectedDao (state, selectedDao) {
             state.selectedDao = selectedDao;
-        }
+        },
+        account (state, account) {
+            state.account = account;
+        },
+        accountShares (state, accountShares) {
+            state.accountShares = accountShares;
+        },
     },
     actions: {
         async provider ({ commit, dispatch, state }, provider) {
@@ -101,8 +112,13 @@ export default new Vuex.Store({
             const chain = await provider.getNetwork();
             commit('chain', chain);
 
+            const accounts = await provider.listAccounts();
+            const account = accounts && accounts.length ? accounts[0] : null;
+            commit('account', account);
+
             dispatch('daoContract', state.selectedDao);
         },
+
         async daoContract({ commit, dispatch, state }, daoName){
             console.log(`loading dao contract: ${daoName}`);
 
@@ -118,7 +134,10 @@ export default new Vuex.Store({
             commit('daoContract', daoContract);
 
             dispatch('contractStatics');
+
+            dispatch('accountStats');
         },
+
         async contractStatics({ commit, dispatch, state }) {
             console.log('loading static stuff...');
 
@@ -160,6 +179,13 @@ export default new Vuex.Store({
                 guildBankApprovedTokenBalance,
                 daoBalance,
             });
-        }
+        },
+
+        async accountStats({ commit, dispatch, state }) {
+            console.log('loading account stuff...');
+
+            const member = await state.daoContract.members(state.account);
+            commit('accountShares', member[1]);
+        },
     }
 });

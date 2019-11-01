@@ -3,59 +3,67 @@
         <b-jumbotron>
             <h1 class="text-center">{{ doaName }}</h1>
             <div class="row" v-if="daoContract && daoStatics">
-            <div class="col-12 col-sm-6">
-                <div>
-                    <span class="text-muted">Total Shares:</span><span class="badge badge-primary ml-2">{{ daoStatics.totalShares }}</span>
+                <div class="col-12 col-sm-6">
+                    <div>
+                        <span class="text-muted">Total Shares:</span><span class="badge badge-primary ml-2">{{ daoStatics.totalShares }}</span>
+                    </div>
+                    <div>
+                        <span class="text-muted">Share price:</span><span class="badge badge-info ml-2">{{ (parseFloat(daoStatics.guildBankApprovedTokenBalance)  /  parseFloat(daoStatics.totalShares)) | toUnit }} {{ unit }}</span>
+                    </div>
+                    <div>
+                        <span class="text-muted">DAO:</span> <code>{{ daoContract.address }}</code>
+                    </div>
+                    <div>
+                        <span class="text-muted">DAO Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.daoBalance | toUnit }} {{ unit }}</span><br/>
+                    </div>
+                    <div>
+                        <span class="text-muted">Approved Token:</span> <code>{{ daoStatics.approvedToken }}</code>
+                    </div>
+                    <hr/>
+                    <div>
+                        <span class="text-muted">Guild Bank:</span> <code>{{ daoStatics.guildBank }}</code><br/>
+                    </div>
+                    <div>
+                        <span class="text-muted">Guild Bank Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.guildBankApprovedTokenBalance | toUnit }} {{ unit }}</span><br/>
+                    </div>
                 </div>
-                <div>
-                    <span class="text-muted">Share price:</span><span class="badge badge-info ml-2">{{ (parseFloat(daoStatics.guildBankApprovedTokenBalance)  /  parseFloat(daoStatics.totalShares)) | toUnit }} {{ unit }}</span>
-                </div>
-                <div>
-                    <span class="text-muted">DAO:</span> <code>{{ daoContract.address }}</code>
-                </div>
-                <div>
-                    <span class="text-muted">DAO Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.daoBalance | toUnit }} {{ unit }}</span><br/>
-                </div>
-                <div>
-                    <span class="text-muted">Approved Token:</span> <code>{{ daoStatics.approvedToken }}</code>
-                </div>
-                <hr/>
-                <div>
-                    <span class="text-muted">Guild Bank:</span> <code>{{ daoStatics.guildBank }}</code><br/>
-                </div>
-                <div>
-                    <span class="text-muted">Guild Bank Balance:</span> <span class="badge badge-info ml-2">{{ daoStatics.guildBankApprovedTokenBalance | toUnit }} {{ unit }}</span><br/>
-                </div>
-                <hr/>
-                <div v-if="proposalsQueueLength">
-                    <span class="text-muted">Queue Length:</span> <span class="badge badge-secondary ml-2">{{ proposalsQueueLength }}</span>
+                <div class="col-12 col-sm-6">
+                    <!--<div>-->
+                        <!--<span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}-->
+                    <!--</div>-->
+                    <div>
+                        <span class="text-muted">Current Period:</span> {{ daoStatics.currentPeriod }}
+                    </div>
+                    <div>
+                        <span class="text-muted">Period Duration:</span> {{ daoStatics.periodDuration }} <small>secs</small> ({{ 1 | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
+                    </div>
+                    <div>
+                        <span class="text-muted">Voting Period Length:</span> {{ daoStatics.votingPeriodLength }} ({{  daoStatics.votingPeriodLength | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
+                    </div>
+                    <div>
+                        <span class="text-muted">Grace Period Length:</span> {{ daoStatics.gracePeriodLength }} ({{ daoStatics.gracePeriodLength | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
+                    </div>
+                    <hr/>
+                    <div>
+                        <span class="text-muted">Proposal Deposit:</span> {{ daoStatics.proposalDeposit | toUnit }} {{ unit }}
+                    </div>
+                    <div>
+                        <span class="text-muted">Processing Reward:</span> {{ daoStatics.processingReward | toUnit }} {{ unit }}
+                    </div>
+                    <hr/>
+                    <div v-if="proposalsQueueLength">
+                        <span class="text-muted">Queue Length:</span> <span class="badge badge-secondary ml-2">{{ proposalsQueueLength }}</span>
+                    </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6">
-                <!--<div>-->
-                    <!--<span class="text-muted">Summoning Time:</span> {{ daoStatics.summoningTime | moment('from') }}-->
-                <!--</div>-->
-                <div>
-                    <span class="text-muted">Current Period:</span> {{ daoStatics.currentPeriod }}
-                </div>
-                <div>
-                    <span class="text-muted">Period Duration:</span> {{ daoStatics.periodDuration }} <small>secs</small> ({{ 1 | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
-                </div>
-                <div>
-                    <span class="text-muted">Voting Period Length:</span> {{ daoStatics.votingPeriodLength }} ({{  daoStatics.votingPeriodLength | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
-                </div>
-                <div>
-                    <span class="text-muted">Grace Period Length:</span> {{ daoStatics.gracePeriodLength }} ({{ daoStatics.gracePeriodLength | toHrs(daoStatics.periodDuration) }} <small>hrs</small>)
-                </div>
-                <hr/>
-                <div>
-                    <span class="text-muted">Proposal Deposit:</span> {{ daoStatics.proposalDeposit | toUnit }} {{ unit }}
-                </div>
-                <div>
-                    <span class="text-muted">Processing Reward:</span> {{ daoStatics.processingReward | toUnit }} {{ unit }}
-                </div>
-                <div class="text-center mt-4">
-                    <b-form inline>
+            <div v-else>
+                <spinner></spinner>
+            </div>
+            <div class="row mt-4 text-center bg-dark text-light" v-if="account">
+                <div class="col-12 p-3">
+                    You are <code>{{ account }}</code> and have <span class="badge badge-secondary ml-2">{{ accountShares }}</span> shares currently worth <span class="badge badge-info ml-2">{{ (parseFloat(daoStatics.guildBankApprovedTokenBalance)  /  parseFloat(daoStatics.totalShares)) * accountShares | toUnit }} {{ unit }}</span>.
+
+                    <b-form inline class="m-3">
                         <b-input class="mb-2 mr-sm-2 mb-sm-0" type="number" v-model="form.noOfShares"></b-input>
 
                         <b-button variant="danger" size="lg" v-on:click="rageQuit()">RAGE QUIT 😤</b-button>
@@ -63,11 +71,8 @@
                             Rage quitting sends your {{ unit }} back in exchange for your shares 💸
                         </b-form-text>
                     </b-form>
+
                 </div>
-            </div>
-        </div>
-            <div v-else>
-                <spinner></spinner>
             </div>
         </b-jumbotron>
         <div class="row" v-if="proposals && daoContract && daoStatics">
@@ -202,6 +207,8 @@
                 'unit',
                 'doaName',
                 'accBalance',
+                'account',
+                'accountShares',
             ]),
         },
         created: async function () {
