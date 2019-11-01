@@ -70,7 +70,7 @@
                         <b-input class="mb-2 mr-sm-2 mb-sm-0" type="number" v-model="form.noOfShares"></b-input>
 
                         <b-button variant="danger" size="lg" v-on:click="rageQuit()">RAGE QUIT 😤</b-button>
-                        <b-form-text>
+                        <b-form-text class="ml-4">
                             Rage quitting sends your {{ unit }} back in exchange for your shares 💸
                         </b-form-text>
                     </b-form>
