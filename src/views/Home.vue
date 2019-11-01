@@ -1,5 +1,8 @@
 <template>
     <div>
+        <div v-if="tx" class="alert alert-primary">
+            ⚙️ Scan that ether here: <a :href="`https://etherscan.io/tx/${tx.hash}`" target="_blank">Transaction {{ tx.hash }}</a>
+        </div>
         <b-jumbotron>
             <h1 class="text-center">{{ doaName }}</h1>
             <div class="row" v-if="daoContract && daoStatics">
@@ -59,7 +62,7 @@
             <div v-else>
                 <spinner></spinner>
             </div>
-            <div class="row mt-4 text-center bg-dark text-light" v-if="account">
+            <div class="row mt-4 text-center bg-dark text-light" v-if="daoContract && daoStatics && account">
                 <div class="col-12 p-3">
                     You are <code>{{ account }}</code> and have <span class="badge badge-secondary ml-2">{{ accountShares }}</span> shares currently worth <span class="badge badge-info ml-2">{{ (parseFloat(daoStatics.guildBankApprovedTokenBalance)  /  parseFloat(daoStatics.totalShares)) * accountShares | toUnit }} {{ unit }}</span>.
 
@@ -256,31 +259,31 @@
             async vote(index, voteVal) {
                 console.log(`voting proposal ${index} with vote of ${voteVal}`);
 
-                const tx = await this.daoContract.submitVote(index, voteVal);
-                alert(`Transaction: ${tx.hash}`);
+                this.tx = await this.daoContract.submitVote(index, voteVal);
+                console.log(`Transaction: ${this.tx.hash}`);
 
-                await tx.wait(1);
-                alert(`Confirmed...`);
+                await this.tx.wait(1);
+                console.log(`Confirmed...`);
             },
 
             async rageQuit(noOfShares) {
                 console.log(`rage quitting ${this.form.noOfShares}`);
 
-                const tx = await this.daoContract.ragequit(this.form.noOfShares);
-                alert(`Transaction: ${tx.hash}`);
+                this.tx = await this.daoContract.ragequit(this.form.noOfShares);
+                console.log(`Transaction: ${this.tx.hash}`);
 
-                await tx.wait(1);
-                alert(`Confirmed...`);
+                await this.tx.wait(1);
+                console.log(`Confirmed...`);
             },
 
             async processProposal(index) {
                 console.log(`process proposal ${index}`);
 
-                const tx = await this.daoContract.processProposal(index);
-                alert(`Transaction: ${tx.hash}`);
+                this.tx = await this.daoContract.processProposal(index);
+                console.log(`Transaction: ${this.tx.hash}`);
 
-                await tx.wait(1);
-                alert(`Confirmed...`);
+                await this.tx.wait(1);
+                console.log(`Confirmed...`);
             }
         },
         filters: {
