@@ -52,6 +52,24 @@ export default new Vuex.Store({
                 address: '0x8487dcc6f4b28b911e22a8657ebb16427d4cf5c0',
                 unit: 'wETH',
             },
+            james: {
+                name: '👩 James DAO 👩',
+                key: 'james',
+                address: '0x77b53ad9d111029d1f16f4f19769846384bda49b',
+                unit: 'wETH',
+            },
+            trojan: {
+                name: '🐴 TrojanDAO 🐴',
+                key: 'trojan',
+                address: '0xcc7dcdb700eed457c8180406d7d699877f4eee24',
+                unit: 'wETH',
+            },
+            raid: {
+                name: '⚔️ Raid Guild ⚔️',
+                key: 'raid',
+                address: '0xbd6fa666fbb6fdeb4fc5eb36cdd5c87b069b24c1',
+                unit: 'wETH',
+            },
         }
     },
     getters: {
